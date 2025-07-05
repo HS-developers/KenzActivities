@@ -195,64 +195,32 @@
       .find-form input, .edit-form input, .edit-form select, .edit-form textarea, .find-form button, .edit-form button { font-size: 0.83rem;}
     }
   </style>
-</head>
-<body>
-  <header>
-    <h1>بوابة كنز للأنشطة الترفيهية</h1>
-  </header>
-  <main>
-    <h2>تعديل بياناتي</h2>
-    <form id="findForm" class="find-form" autocomplete="off">
-      <input type="text" id="userId" placeholder="رقم المستخدم المميز" required>
-      <input type="tel" id="phone" placeholder="رقم التليفون" required>
-      <div id="findError" class="error"></div>
-      <button type="submit">بحث عن البيانات</button>
-    </form>
-    <form id="editForm" class="edit-form" style="display:none;" autocomplete="off">
-      <input type="text" id="editName" placeholder="👤 الاسم بالكامل" required>
-      <input type="tel" id="editPhone" placeholder="📞 رقم التليفون" required pattern="^[0-9+\- ]{8,}$" title="أدخل رقم هاتف صحيح">
-      <input type="text" id="editUnit" placeholder="🏠 رقم الوحدة" required>
-      <div class="activity-row">
-        <label for="editActivity" class="activity-icon" title="اختر نوع النشاط">🎯</label>
-        <select id="editActivity" class="activity-select" multiple required>
-          <option value="كرة قدم">⚽ كرة قدم</option>
-          <option value="تنس ارضي">🎾 تنس أرضي</option>
-          <option value="تنس طاولة">🏓 تنس طاولة</option>
-          <option value="كرة طائرة">🏐 كرة طائرة</option>
-          <option value="كرة سلة">🏀 كرة سلة</option>
-          <option value="قيادة دراجات">🚴‍♂️ قيادة دراجات</option>
-          <option value="شطرنج">♟️ شطرنج</option>
-          <option value="بازارات/جراج سيل">🛍️ اشتراك في بازارات/جراج سيل</option>
-        </select>
-        <label for="editActivity" style="margin:0 3px 0 0;">نوع النشاط</label>
-      </div>
-      <div class="hint">يمكنك اختيار أكثر من نشاط بالضغط مع زر Ctrl أو لمس متعدد على الجوال</div>
-      <textarea id="editExtraInfo" placeholder="📝 بيانات إضافية (مثلاً: ملاحظات، اقتراحات، أو تفاصيل أخرى)" rows="3" style="resize:vertical;"></textarea>
-      <input type="date" id="editBirthdate" max="2100-12-31">
-      <div class="hint" id="editBirthdateHint">تاريخ الميلاد (اختياري)</div>
-      <div id="editError" class="error"></div>
-      <div id="editSuccess" class="success"></div>
-      <button type="submit">حفظ التعديلات</button>
-    </form>
-  </main>
-  <footer>
-    Copyright © 2025 GENIUS Tech All Rights Reserved
-  </footer>
-  <!-- Firebase -->
+  <!-- Firebase حماية الصفحة -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // Firebase config
+    // حماية الصفحة: التحقق من التسجيل
     const firebaseConfig = {
-    apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-    authDomain: "kenz-activities.firebaseapp.com",
-    projectId: "kenz-activities",
-    storageBucket: "kenz-activities.firebasestorage.app",
-    messagingSenderId: "323107285981",
-    appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-    measurementId: "G-YVS8P6LQVW" 
-   };
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+    // --- هنا تبدأ الحماية ---
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = "login.html?next=kenz-edit.html";
+      }
+    });
+    // --- هنا ينتهي كود الحماية ---
+
+    // باقي كود الصفحة كما هو (بحث وتعديل البيانات)
     const db = firebase.firestore();
 
     const findForm = document.getElementById('findForm');
