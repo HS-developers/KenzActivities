@@ -223,6 +223,29 @@
   </style>
   <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <!-- Firebase حماية الصفحة -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+    // حماية الصفحة: التحقق من التسجيل
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = 'login.html?next=kenz-data.html';
+      }
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -237,7 +260,6 @@
       <input type="text" id="name" placeholder="👤 الاسم بالكامل" required>
       <input type="tel" id="phone" placeholder="📞 رقم التليفون" required pattern="^[0-9+\- ]{8,}$" title="أدخل رقم هاتف صحيح">
       <input type="text" id="unit" placeholder="🏠 رقم الوحدة" required>
-      <!-- الجملة الآن فوق الجدول مباشرة -->
       <div class="hint">يمكنك اختيار أكثر من نشاط بالضغط مع زر Ctrl أو لمس متعدد على الجوال</div>
       <div class="activity-row">
         <label for="activity" class="activity-icon" title="اختر نوع النشاط">🎯</label>
@@ -253,7 +275,6 @@
         </select>
         <label for="activity" style="margin:0 3px 0 0;">نوع النشاط</label>
       </div>
-      <!-- تم حذف الجملة من هنا -->
       <textarea id="extraInfo" placeholder="📝 بيانات إضافية (مثلاً: ملاحظات، اقتراحات، أو تفاصيل أخرى)" rows="3" style="resize:vertical;"></textarea>
       <input type="date" id="birthdate" max="2100-12-31">
       <div class="hint" id="birthdateHint">تاريخ الميلاد (اختياري)</div>
@@ -265,30 +286,11 @@
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-      authDomain: "kenz-activities.firebaseapp.com",
-      projectId: "kenz-activities",
-      storageBucket: "kenz-activities.firebasestorage.app",
-      messagingSenderId: "323107285981",
-      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-      measurementId: "G-YVS8P6LQVW"
-    };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+  <script>
+    // استخدم فايرستور (firebase-compat) و jsPDF (موجودين أعلاه)
+    const db = firebase.firestore();
 
-    onAuthStateChanged(auth, function(user) {
-      if (!user) {
-        window.location.href = 'kenz-login.html?next=' + encodeURIComponent(window.location.pathname.split('/').pop());
-      }
-    });
-
-    window.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('kenzDataForm');
       const errorDiv = document.getElementById('formError');
       const successDiv = document.getElementById('formSuccess');
@@ -370,7 +372,7 @@
         const userId = generateUserId();
 
         try {
-          await addDoc(collection(db, 'kenzActivities'), {
+          await db.collection('kenzActivities').add({
             userId,
             name,
             phone,
