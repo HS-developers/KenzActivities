@@ -297,6 +297,26 @@
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+  <script>
+    // حماية الصفحة: التحقق من تسجيل الدخول
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (!user) {
+        window.location.href = "login.html?next=teams.html";
+      }
+    });
+  </script>
 </head>
 <body>
   <header>
@@ -323,31 +343,19 @@
     <div class="teams-list" id="teamsListSection" style="display:none;">
       <h3>قائمة الفرق المسجلة</h3>
       <div id="teamsCards"></div>
-
       <!-- زر تكوين المجموعات يظهر فقط لكرة القدم -->
       <div style="text-align:center; margin-top: 15px;" id="groupsButtonContainer" hidden>
-    <button class="game-btn" onclick="askGroupSize()" style="background:#4caf50; color:white; padding:10px 20px; border-radius:10px; border:none; font-size:1rem; cursor:pointer;">
-  🔀 تكوين المجموعات
-</button>
+        <button class="game-btn" onclick="askGroupSize()" style="background:#4caf50; color:white; padding:10px 20px; border-radius:10px; border:none; font-size:1rem; cursor:pointer;">
+          🔀 تكوين المجموعات
+        </button>
       </div>
-    </div>
     </div>
   </main>
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
   <script>
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-      authDomain: "kenz-activities.firebaseapp.com",
-      projectId: "kenz-activities",
-      storageBucket: "kenz-activities.firebasestorage.app",
-      messagingSenderId: "323107285981",
-      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-      measurementId: "G-YVS8P6LQVW"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    // ... باقي كود الصفحة كما هو بدون تغيير ...
     const db = firebase.firestore();
 
     // عناصر الصفحة
@@ -379,30 +387,29 @@
 
     // إظهار/إخفاء الفورم حسب اختيار اللعبة
     function selectGame(game) {
-  currentGame = game;
-  // تمييز الزر المختار
-  gameBtns.forEach(btn => {
-    if (btn.dataset.game === game) btn.classList.add('active');
-    else btn.classList.remove('active');
-  });
-  // تحديث عنوان الفورم
-  formGameTitle.textContent = `تكوين فريق جديد في ${GAME_TYPES[game].icon} ${game}`;
-  // إعادة تعيين الفورم
-  teamForm.reset();
-  playersList.innerHTML = '';
-  playersHint.textContent = 'انتظر تحميل اللاعبين...';
-  formError.style.display = 'none';
-  formSuccess.style.display = 'none';
-  saveTeamBtn.disabled = true;
-  selectedPlayers = [];
-  // إظهار الفورم
-  teamFormSection.style.display = '';
-  // جلب اللاعبين من قاعدة البيانات
-  fetchPlayersForGame(game);
-  // إظهار زر تكوين المجموعات فقط إذا كانت اللعبة كرة قدم
-  document.getElementById("groupsButtonContainer").hidden = (game !== "كرة قدم");
-}
-
+      currentGame = game;
+      // تمييز الزر المختار
+      gameBtns.forEach(btn => {
+        if (btn.dataset.game === game) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      // تحديث عنوان الفورم
+      formGameTitle.textContent = `تكوين فريق جديد في ${GAME_TYPES[game].icon} ${game}`;
+      // إعادة تعيين الفورم
+      teamForm.reset();
+      playersList.innerHTML = '';
+      playersHint.textContent = 'انتظر تحميل اللاعبين...';
+      formError.style.display = 'none';
+      formSuccess.style.display = 'none';
+      saveTeamBtn.disabled = true;
+      selectedPlayers = [];
+      // إظهار الفورم
+      teamFormSection.style.display = '';
+      // جلب اللاعبين من قاعدة البيانات
+      fetchPlayersForGame(game);
+      // إظهار زر تكوين المجموعات فقط إذا كانت اللعبة كرة قدم
+      document.getElementById("groupsButtonContainer").hidden = (game !== "كرة قدم");
+    }
 
     // جلب اللاعبين من قاعدة البيانات حسب نوع النشاط مع استبعاد من تم اختيارهم بالفعل
     function fetchPlayersForGame(game) {
@@ -601,14 +608,14 @@
       gameBtns[0].click();
     });
     function askGroupSize() {
-  const input = prompt("كم عدد الفرق في كل مجموعة؟");
-  const size = parseInt(input);
-  if (!isNaN(size) && size > 0) {
-    window.location.href = `groups.html?groupSize=${size}`;
-  } else {
-    alert("يرجى إدخال رقم صالح (أكبر من 0).");
-  }
-}
+      const input = prompt("كم عدد الفرق في كل مجموعة؟");
+      const size = parseInt(input);
+      if (!isNaN(size) && size > 0) {
+        window.location.href = `groups.html?groupSize=${size}`;
+      } else {
+        alert("يرجى إدخال رقم صالح (أكبر من 0).");
+      }
+    }
   </script>
 </body>
 </html>
