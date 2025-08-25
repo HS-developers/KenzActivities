@@ -172,29 +172,6 @@
       header h1 { font-size: 1rem;}
     }
   </style>
-  <!-- Firebase حماية الصفحة -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-      authDomain: "kenz-activities.firebaseapp.com",
-      projectId: "kenz-activities",
-      storageBucket: "kenz-activities.firebasestorage.app",
-      messagingSenderId: "323107285981",
-      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-      measurementId: "G-YVS8P6LQVW"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
-    // حماية الصفحة: التحقق من التسجيل
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (!user) {
-        // لو مش مسجل دخول، يحوله للوجين
-        window.location.href = "login.html?next=index.html";
-      }
-    });
-  </script>
 </head>
 <body>
   <header>
@@ -206,12 +183,13 @@
       <span class="kenz-ready">جاهزين يا كنزاوية 💪</span>
     </div>
     <div class="action-btn-wrapper">
-      <button class="action-btn" onclick="window.location.href='login.html?next=kenz-data.html'">
-        تسجيل البيانات
-      </button>
-      <button class="action-btn" onclick="window.location.href='login.html?next=kenz-edit.html'">
-        تعديل البيانات
-      </button>
+<button class="action-btn" onclick="window.location.href='login.html?next=kenz-data.html'">
+  تسجيل البيانات
+</button>
+<button class="action-btn" onclick="window.location.href='login.html?next=kenz-edit.html'">
+  تعديل البيانات
+</button>
+
     </div>
   </main>
   <footer>
