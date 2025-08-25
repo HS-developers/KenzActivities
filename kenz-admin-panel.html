@@ -286,6 +286,7 @@
               <th>الأنشطة</th>
               <th>تاريخ الميلاد</th>
               <th>البيانات الإضافية</th>
+              <th>تاريخ الإدخال</th>
             </tr>
           </thead>
           <tbody id="tableBody">
@@ -321,14 +322,6 @@
     firebase.auth().onAuthStateChanged(function(user) {
       if (!user) {
         window.location.href = 'kenz-admin-login.html';
-      } else {
-        // تحقق من صلاحيات الأدمن من قاعدة البيانات
-        db.collection('users').doc(user.uid).get().then(doc => {
-          if (!doc.exists || doc.data().isAdmin !== true) {
-            // لو مش أدمن فعلاً يرجعه للرئيسية
-            window.location.href = "index.html";
-          }
-        });
       }
     });
 
@@ -343,27 +336,45 @@
     const footballBtn = document.getElementById('footballBtn');
 
     function renderTable(data) {
-      tableBody.innerHTML = "";
-      if (!data.length) {
-        tableBody.innerHTML = '<tr><td colspan="7">لا يوجد بيانات</td></tr>';
-        totalCountBox.textContent = 'إجمالي المسجلين: 0';
-        return;
-      }
-      for (const row of data) {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${row.userId || ''}</td>
-          <td>${row.name || ''}</td>
-          <td>${row.phone || ''}</td>
-          <td>${row.unit || ''}</td>
-          <td>${Array.isArray(row.activities) ? row.activities.join(' - ') : ''}</td>
-          <td>${row.birthdate || ''}</td>
-          <td>${row.extraInfo || ''}</td>
-        `;
-        tableBody.appendChild(tr);
-      }
-      totalCountBox.textContent = `إجمالي المسجلين: ${data.length}`;
+  tableBody.innerHTML = "";
+  if (!data.length) {
+    tableBody.innerHTML = '<tr><td colspan="8">لا يوجد بيانات</td></tr>';
+    totalCountBox.textContent = 'إجمالي المسجلين: 0';
+    return;
+  }
+
+  for (const row of data) {
+    let createdOrUpdated;
+
+    if (row.updatedAt && row.updatedAt.seconds) {
+      // لو فيه تاريخ تعديل نعرضه
+      createdOrUpdated = new Date(row.updatedAt.seconds * 1000).toLocaleString('ar-EG');
+    } else if (row.createdAt && row.createdAt.seconds) {
+      // لو مفيش تعديل نستخدم تاريخ الإنشاء
+      createdOrUpdated = new Date(row.createdAt.seconds * 1000).toLocaleString('ar-EG');
+    } else if (row.__createTime) {
+      // fallback لو createdAt مش موجود أصلاً
+      createdOrUpdated = new Date(row.__createTime.seconds * 1000).toLocaleString('ar-EG');
+    } else {
+      createdOrUpdated = "—";
     }
+
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${row.userId || ''}</td>
+      <td>${row.name || ''}</td>
+      <td>${row.phone || ''}</td>
+      <td>${row.unit || ''}</td>
+      <td>${Array.isArray(row.activities) ? row.activities.join(' - ') : ''}</td>
+      <td>${row.birthdate || ''}</td>
+      <td>${row.extraInfo || ''}</td>
+      <td>${createdOrUpdated}</td>
+    `;
+    tableBody.appendChild(tr);
+  }
+
+  totalCountBox.textContent = `إجمالي المسجلين: ${data.length}`;
+}
 
     function filterData() {
       // فلتر النشاط
@@ -383,32 +394,54 @@
 
     // جلب بيانات المشتركين
     async function fetchData() {
-      tableBody.innerHTML = '<tr><td colspan="7">جاري التحميل...</td></tr>';
-      const snapshot = await db.collection('kenzActivities').orderBy('createdAt', 'desc').get();
-      allData = snapshot.docs.map(doc => doc.data());
-      filterData();
+  tableBody.innerHTML = '<tr><td colspan="8">جاري التحميل...</td></tr>';
+  const snapshot = await db.collection('kenzActivities').orderBy('createdAt', 'desc').get();
+  
+  // بنضيف createTime يدويًا لو createdAt مش موجود
+  allData = snapshot.docs.map(doc => {
+    const data = doc.data();
+    if (!data.createdAt) {
+      data.__createTime = doc._delegate._document.createTime;
     }
+    return data;
+  });
+
+  filterData();
+}
 
     activityFilter.addEventListener('change', filterData);
     userIdFilter.addEventListener('input', filterData);
 
     // تصدير الى Excel
     exportBtn.addEventListener('click', function () {
-      if (!filteredData.length) return;
-      const excelData = filteredData.map(row => ({
-        "رقم المشترك": row.userId || '',
-        "الاسم": row.name || '',
-        "رقم التليفون": row.phone || '',
-        "رقم الوحدة": row.unit || '',
-        "الأنشطة": Array.isArray(row.activities) ? row.activities.join(' - ') : '',
-        "تاريخ الميلاد": row.birthdate || '',
-        "البيانات الإضافية": row.extraInfo || ''
-      }));
-      const ws = XLSX.utils.json_to_sheet(excelData, {cellDates:true});
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "المشتركين");
-      XLSX.writeFile(wb, "kenz_activities.xlsx", {cellDates:true, bookType:"xlsx", type:"binary"});
-    });
+  if (!filteredData.length) return;
+
+  const excelData = filteredData.map(row => {
+    const lastDate = row.updatedAt?.seconds
+      ? new Date(row.updatedAt.seconds * 1000).toLocaleString('ar-EG')
+      : row.createdAt?.seconds
+        ? new Date(row.createdAt.seconds * 1000).toLocaleString('ar-EG')
+        : row.__createTime
+          ? new Date(row.__createTime.seconds * 1000).toLocaleString('ar-EG')
+          : '';
+
+    return {
+      "رقم المشترك": row.userId || '',
+      "الاسم": row.name || '',
+      "رقم التليفون": row.phone || '',
+      "رقم الوحدة": row.unit || '',
+      "الأنشطة": Array.isArray(row.activities) ? row.activities.join(' - ') : '',
+      "تاريخ الميلاد": row.birthdate || '',
+      "البيانات الإضافية": row.extraInfo || '',
+      "آخر تعديل/تسجيل": lastDate
+    };
+  });
+
+  const ws = XLSX.utils.json_to_sheet(excelData, { cellDates: true });
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "المشتركين");
+  XLSX.writeFile(wb, "kenz_activities.xlsx", { cellDates: true, bookType: "xlsx", type: "binary" });
+});
 
     // زر دوري أبطال كنز
     footballBtn.addEventListener('click', function() {
