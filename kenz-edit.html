@@ -272,8 +272,8 @@
     function updateBirthdateRequirementEdit() {
       const selected = Array.from(editActivity.selectedOptions).map(opt => opt.value);
       const needsBirthdate = selected.some(
-        v => v !== 'قيادة دراجات' && v !== 'شطرنج' && v !== 'اشتراك في بازارات/جراج سيل'
-      );
+      v => v !== "قيادة دراجات" && v !== "شطرنج" && v !== "بازارات/جراج سيل"
+   );
       if (selected.length === 0) {
         editBirthdate.required = false;
         editBirthdateHint.textContent = "تاريخ الميلاد (اختياري)";
@@ -356,7 +356,7 @@
         editError.textContent = "يرجى استكمال جميع البيانات المطلوبة.";
         return;
       }
-      const needsBirthdate = activities.some(v => v !== 'قيادة دراجات' && v !== 'شطرنج');
+      const needsBirthdate = activities.some(v => v !== 'قيادة دراجات' && v !== 'شطرنج' && v !== 'بازارات/جراج سيل');
       if (needsBirthdate && !birthdate) {
         editError.textContent = "تاريخ الميلاد إجباري مع اختيار هذا النشاط.";
         editBirthdate.focus();
