@@ -223,29 +223,6 @@
   </style>
   <!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- Firebase حماية الصفحة -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-      authDomain: "kenz-activities.firebaseapp.com",
-      projectId: "kenz-activities",
-      storageBucket: "kenz-activities.firebasestorage.app",
-      messagingSenderId: "323107285981",
-      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-      measurementId: "G-YVS8P6LQVW"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
-    // حماية الصفحة: التحقق من التسجيل
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (!user) {
-        window.location.href = 'login.html?next=kenz-data.html';
-      }
-    });
-  </script>
 </head>
 <body>
   <header>
@@ -286,11 +263,30 @@
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
-  <script>
-    // استخدم فايرستور (firebase-compat) و jsPDF (موجودين أعلاه)
-    const db = firebase.firestore();
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-    document.addEventListener('DOMContentLoaded', function() {
+    onAuthStateChanged(auth, function(user) {
+      if (!user) {
+        window.location.href = 'kenz-login.html?next=' + encodeURIComponent(window.location.pathname.split('/').pop());
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', function() {
       const form = document.getElementById('kenzDataForm');
       const errorDiv = document.getElementById('formError');
       const successDiv = document.getElementById('formSuccess');
@@ -306,7 +302,7 @@
       function updateBirthdateRequirement() {
         const selected = Array.from(activitySelect.selectedOptions).map(opt => opt.value);
         const needsBirthdate = selected.some(
-          v => v !== 'قيادة دراجات' && v !== 'شطرنج'
+          v => v !== 'قيادة دراجات' && v !== 'شطرنج' && v !== 'بازارات/جراج سيل'
         );
         if (selected.length === 0) {
           birthdateInput.required = false;
@@ -323,7 +319,7 @@
 
       function generateUserId() {
         const now = Date.now();
-        const rand = Math.floor(100 + Math.random()*900); // 3 أرقام عشوائية
+        const rand = Math.floor(100 + Math.random()*900);
         return `${now}${rand}`;
       }
 
@@ -361,7 +357,7 @@
           return;
         }
         const needsBirthdate = selectedActivities.some(
-          v => v !== 'قيادة دراجات' && v !== 'شطرنج'
+          v => v !== 'قيادة دراجات' && v !== 'شطرنج' && v !== 'بازارات/جراج سيل'
         );
         if (needsBirthdate && !birthdate) {
           errorDiv.textContent = "تاريخ الميلاد إجباري مع اختيار هذا النشاط.";
@@ -372,7 +368,7 @@
         const userId = generateUserId();
 
         try {
-          await db.collection('kenzActivities').add({
+          await addDoc(collection(db, 'kenzActivities'), {
             userId,
             name,
             phone,
