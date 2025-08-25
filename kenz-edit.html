@@ -364,14 +364,15 @@
       }
 
       try {
-        await db.collection('kenzActivities').doc(docId).update({
-          name,
-          phone,
-          unit,
-          activities,
-          birthdate: birthdate || null,
-          extraInfo: extraInfo || null
-        });
+      await db.collection('kenzActivities').doc(docId).update({
+       name,
+       phone,
+       unit,
+       activities,
+       birthdate: birthdate || null,
+       extraInfo: extraInfo || null,
+       updatedAt: firebase.firestore.FieldValue.serverTimestamp() // ⬅️ هنا بنضيف تاريخ آخر تعديل
+    });
         editSuccess.textContent = "✅ تم تحديث البيانات بنجاح!";
       } catch (err) {
         editError.textContent = "❌ حدث خطأ أثناء تحديث البيانات. حاول مرة أخرى.";
@@ -380,4 +381,3 @@
   </script>
 </body>
 </html>
-
