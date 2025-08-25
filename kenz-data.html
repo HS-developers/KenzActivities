@@ -120,6 +120,12 @@
       background: linear-gradient(90deg, #ffeb3b 10%, #ff9800 100%);
       color: #1c0171;
     }
+    .edit-btn {
+      background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+    }
+    .edit-btn:hover {
+      background: linear-gradient(90deg, #185a9d 10%, #43cea2 100%);
+    }
     .error {
       color: #d32f2f;
       margin-bottom: 10px;
@@ -258,6 +264,8 @@
       <div id="formError" class="error"></div>
       <div id="formSuccess" class="success"></div>
       <button type="submit">إرسال البيانات</button>
+      <!-- زر الانتقال إلى صفحة التعديل -->
+      <button type="button" class="edit-btn" id="goToEditPage">الانتقال لصفحة تعديل البيانات</button>
     </form>
   </main>
   <footer>
@@ -267,6 +275,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
     import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
     const firebaseConfig = {
       apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
       authDomain: "kenz-activities.firebaseapp.com",
@@ -276,6 +285,7 @@
       appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
       measurementId: "G-YVS8P6LQVW"
     };
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
@@ -297,6 +307,7 @@
       const saveWarning = document.getElementById('saveWarning');
       const pdfBtn = document.getElementById('pdfBtn');
       const extraInfoInput = document.getElementById('extraInfo');
+      const goToEditPage = document.getElementById('goToEditPage');
       let lastUserData = null;
 
       function updateBirthdateRequirement() {
@@ -378,8 +389,7 @@
             birthdate: birthdate || null,
             createdAt: new Date()
           });
-          successDiv.textContent = "✅ تم إرسال البيانات بنجاح!";
-          userIdBox.innerHTML = `رقمك الخاص في النظام: <span dir="ltr" style="font-family:monospace;color:#bf8c18">${userId}</span><br>الأنشطة المسجلة: <span style="color:#007bff">${selectedActivities.join(' - ')}</span>`;
+          successDiv.textContent = "✅ تم إرسال البيانات بنجاح!";          userIdBox.innerHTML = `رقمك الخاص في النظام: <span dir="ltr" style="font-family:monospace;color:#bf8c18">${userId}</span><br>الأنشطة المسجلة: <span style="color:#007bff">${selectedActivities.join(' - ')}</span>`;
           userIdBox.style.display = 'flex';
           saveWarning.style.display = 'inline-block';
           pdfBtn.style.display = 'inline-block';
@@ -420,6 +430,13 @@
         doc.save(`Kenz-User-Data-${lastUserData.userId}.pdf`);
       });
     });
+    // زر الانتقال إلى صفحة التعديل
+  const goToEditPage = document.getElementById('goToEditPage');
+  if (goToEditPage) {
+    goToEditPage.addEventListener('click', () => {
+      window.location.href = 'kenz-edit.html';
+    });
+  }
   </script>
 </body>
 </html>
