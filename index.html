@@ -28,6 +28,7 @@
       justify-content: center;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
     header h1 {
       font-size: 2.2rem;
@@ -39,6 +40,31 @@
       text-align: center;
       width: 100%;
     }
+
+    /* زر دخول الأدمن في الهيدر (اختياري تضعه هنا أو تحت) */
+    .admin-header-btn {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, #2196f3 20%, #64b5f6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 8px 14px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0px 6px 16px rgba(33, 150, 243, 0.25);
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      letter-spacing: .3px;
+    }
+    .admin-header-btn:hover {
+      background: linear-gradient(90deg, #64b5f6 20%, #2196f3 100%);
+      box-shadow: 0px 10px 22px rgba(33, 150, 243, 0.35);
+      transform: translateY(-50%) scale(1.04);
+    }
+
     main {
       flex: 1;
       display: flex;
@@ -112,6 +138,7 @@
       justify-content: center;
       gap: 16px;
       margin-bottom: 30px;
+      flex-wrap: wrap;
     }
     .action-btn {
       background: linear-gradient(90deg, #ff9800 30%, #ffeb3b 80%);
@@ -133,6 +160,7 @@
       box-shadow: 0px 15px 32px rgba(255, 193, 7, 0.28);
       transform: scale(1.04);
     }
+
     footer {
       width: 100%;
       padding: 15px 8px;
@@ -148,9 +176,11 @@
       z-index: 1;
     }
     @media (max-width: 900px) {
+      header h1 { font-size: 1.6rem;}
       .highlight-section { font-size: 1.5rem; padding: 32px 12px;}
       .kenz-ready { font-size: 1.4rem;}
       .action-btn { font-size: 1.04rem; padding: 13px 20px;}
+      .admin-header-btn { left: 10px; }
     }
     @media (max-width: 700px) {
       header h1 { font-size: 1.3rem;}
@@ -164,6 +194,7 @@
       .kenz-ready { font-size: 0.97rem;}
       .action-btn { padding: 10px 10vw; font-size: 0.99rem;}
       footer { font-size: 11px;}
+      .admin-header-btn { font-size: 0.85rem; padding: 6px 10px; }
     }
     @media (max-width: 350px) {
       .highlight-section { font-size: 0.81rem; }
@@ -171,29 +202,244 @@
       .action-btn { font-size: 0.83rem; padding: 8px 9vw;}
       header h1 { font-size: 1rem;}
     }
+
+    /* نافذة دخول الأدمن (Modal) */
+    .modal {
+      display: none; /* flex عند الفتح */
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-content {
+      width: 100%;
+      max-width: 360px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(33,150,243,0.18);
+      padding: 22px 18px 18px 18px;
+      position: relative;
+      animation: fadeIn .25s ease-out;
+    }
+    .modal-content h2 {
+      margin: 0 0 12px 0;
+      color: #1976d2;
+      font-size: 1.25rem;
+      text-align: center;
+      letter-spacing: .5px;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border .2s;
+      font-family: inherit;
+    }
+    .modal-content input:focus {
+      border-color: #1976d2;
+      box-shadow: 0 0 6px rgba(25,118,210,0.25);
+    }
+    .modal-content button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(90deg, #2196f3 20%, #64b5f6 100%);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1.05rem;
+      cursor: pointer;
+      transition: background .3s, transform .15s;
+    }
+    .modal-content button:hover {
+      background: linear-gradient(90deg, #64b5f6 20%, #2196f3 100%);
+      transform: scale(1.01);
+    }
+    .close {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 24px;
+      color: #999;
+      cursor: pointer;
+      user-select: none;
+    }
+    .close:hover { color: #555; }
+
+    .error-text {
+      color: #d32f2f;
+      font-size: .95rem;
+      text-align: center;
+      min-height: 1.2em;
+      margin-top: 6px;
+    }
+    .hint-mini {
+      text-align: center;
+      font-size: .85rem;
+      color: #666;
+      margin: 6px 0 0;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(.98); }
+      to { opacity: 1; transform: scale(1); }
+    }
   </style>
 </head>
 <body>
   <header>
     <h1>بوابة كنز للأنشطة الترفيهية</h1>
+    <!-- زر دخول الأدمن -->
+    <button id="adminLoginBtn" class="admin-header-btn" type="button">دخول الأدمن</button>
   </header>
+
   <main>
     <div class="highlight-section">
       مرحبا بالجيران الأعزاء في بوابة كنز للأنشطة .. هنا هنسجل بياناتنا علشان نتشارك المرح والترفيه وكل الأنشطة اللي تقربنا من بعض وتخلق جو من الألفة والود بينا ...
       <span class="kenz-ready">جاهزين يا كنزاوية 💪</span>
     </div>
-    <div class="action-btn-wrapper">
-<button class="action-btn" onclick="window.location.href='login.html?next=kenz-data.html'">
-  تسجيل البيانات
-</button>
-<button class="action-btn" onclick="window.location.href='login.html?next=kenz-edit.html'">
-  تعديل البيانات
-</button>
 
+    <div class="action-btn-wrapper">
+      <button class="action-btn" onclick="window.location.href='login.html?next=kenz-data.html'">
+        تسجيل البيانات
+      </button>
+      <button class="action-btn" onclick="window.location.href='login.html?next=kenz-edit.html'">
+        تعديل البيانات
+      </button>
     </div>
   </main>
+
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
+
+  <!-- نافذة منبثقة لتسجيل دخول الأدمن -->
+  <div id="adminLoginModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="adminModalTitle">
+    <div class="modal-content">
+      <span id="closeModal" class="close" title="إغلاق">&times;</span>
+      <h2 id="adminModalTitle">تسجيل دخول الأدمن</h2>
+      <input type="email" id="adminEmail" placeholder="✉️ البريد الإلكتروني" autocomplete="username" required>
+      <input type="password" id="adminPassword" placeholder="🔒 كلمة المرور" autocomplete="current-password" required>
+      <button id="adminLoginSubmit" type="button">تسجيل الدخول</button>
+      <div id="adminLoginError" class="error-text"></div>
+      <div class="hint-mini">هذا الدخول مخصص للمشرفين فقط</div>
+    </div>
+  </div>
+
+  <!-- Firebase (نسخة الموديول) + منطق دخول الأدمن -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+    // إعداد Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // عناصر الواجهة
+    const adminBtn = document.getElementById('adminLoginBtn');
+    const modal = document.getElementById('adminLoginModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const emailInput = document.getElementById('adminEmail');
+    const passInput = document.getElementById('adminPassword');
+    const submitBtn = document.getElementById('adminLoginSubmit');
+    const errDiv = document.getElementById('adminLoginError');
+
+    // فتح/غلق المودال
+    function openModal() {
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+      errDiv.textContent = '';
+      emailInput.value = '';
+      passInput.value = '';
+      setTimeout(() => emailInput.focus(), 50);
+    }
+    function closeModal() {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      errDiv.textContent = '';
+    }
+
+    adminBtn.addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'flex') closeModal();
+    });
+
+    // دخول الأدمن
+    async function adminLogin() {
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passInput.value;
+
+      errDiv.textContent = '';
+      if (!email || !password) {
+        errDiv.textContent = 'يرجى إدخال البريد الإلكتروني وكلمة المرور.';
+        return;
+      }
+
+      submitBtn.disabled = true;
+      const originalText = submitBtn.textContent;
+      submitBtn.textContent = 'جاري الدخول...';
+
+      try {
+        const cred = await signInWithEmailAndPassword(auth, email, password);
+        const uid = cred.user.uid;
+
+        // قراءة صلاحيات المستخدم من users/{uid}
+        const snap = await getDoc(doc(db, 'users', uid));
+        if (snap.exists() && snap.data().isAdmin === true) {
+          // تحويل لصفحة الأدمن
+          window.location.href = 'kenz-admin-panel.html';
+        } else {
+          errDiv.textContent = 'غير مسموح لك بالدخول (ليس لديك صلاحية أدمن).';
+          await signOut(auth);
+        }
+      } catch (e) {
+        let msg = 'حدث خطأ أثناء تسجيل الدخول.';
+        // رسائل أوضح شوية
+        const code = e && e.code ? e.code : '';
+        if (code === 'auth/user-not-found' || code === 'auth/wrong-password') {
+          msg = 'بيانات الدخول غير صحيحة.';
+        } else if (code === 'auth/invalid-email') {
+          msg = 'صيغة البريد الإلكتروني غير صحيحة.';
+        }
+        errDiv.textContent = msg;
+        console.error(e);
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = originalText;
+      }
+    }
+
+    submitBtn.addEventListener('click', adminLogin);
+    // السماح بالضغط Enter داخل الحقول
+    [emailInput, passInput].forEach(inp => {
+      inp.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          adminLogin();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
