@@ -6,7 +6,12 @@
   <title>لوحة تحكم المشرفين | بوابة كنز للأنشطة الترفيهية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    html, body { height: 100%; margin: 0; padding: 0;}
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* يمنع السكرول يمين وشمال */
+    }
     body {
       min-height: 100vh;
       display: flex;
@@ -16,7 +21,7 @@
     }
     header {
       width: 95%;
-      max-width: 1200px;
+      max-width: 1080px;
       margin: 20px auto 0;
       padding: 15px 30px;
       background: rgba(104, 26, 26, 0.85);
@@ -26,6 +31,7 @@
       justify-content: center;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      box-sizing: border-box;
     }
     header h1 {
       font-size: 2rem;
@@ -47,16 +53,17 @@
     }
     .panel-container {
       background: #fff;
-      margin: 45px auto 30px auto;
+      margin: 30px auto;
       border-radius: 18px;
       box-shadow: 0 8px 24px rgba(255,193,7,0.13);
-      padding: 27px 12px 19px 12px;
-      width: 100%;
+      padding: 27px 15px 19px 15px;
+      width: 95%;
       max-width: 1080px;
       animation: fadeIn 0.7s;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-sizing: border-box;
     }
     .admin-filters {
       width: 100%;
@@ -73,6 +80,7 @@
       box-shadow: 0 2px 12px #ffe08260;
       font-size: 1.1em;
       font-weight: bold;
+      box-sizing: border-box;
     }
     .admin-filters label {
       margin-left: 6px;
@@ -160,17 +168,19 @@
     }
     .admin-table-container {
       width: 100%;
+      max-width: 100%;
       overflow-x: auto;
       margin: 0 auto;
-      max-width: 1040px;
+      box-sizing: border-box;
     }
     table {
       border-collapse: collapse;
       width: 100%;
       font-size: 1em;
-      min-width: 800px;
+      min-width: unset; /* منع السكرول */
       margin-top: 10px;
       background: #fffde7;
+      table-layout: auto;
     }
     th, td {
       padding: 12px 7px;
@@ -218,18 +228,17 @@
       to { opacity: 1; transform: scale(1);}
     }
     footer {
-      width: 100%;
+      width: 95%;
+      max-width: 1080px;
       padding: 15px 8px;
       background: rgba(255,255,255,0.95);
       text-align: center;
       font-size: 13px;
       color: #1e1d1d;
       box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      margin-top: 0;
-      position: relative;
-      z-index: 1;
+      border-radius: 15px;
+      margin: 20px auto;
+      box-sizing: border-box;
     }
     @media (max-width: 800px) {
       .panel-container { padding: 11px 1vw;}
