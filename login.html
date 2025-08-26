@@ -6,7 +6,16 @@
   <title>تسجيل الدخول | بوابة كنز للأنشطة الترفيهية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    html, body { height: 100%; margin: 0; padding: 0;}
+    /* الأساسيات */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden; /* منع السكرول الجانبي */
+    }
+
     body {
       min-height: 100vh;
       display: flex;
@@ -14,19 +23,20 @@
       font-family: 'Cairo', sans-serif;
       background: linear-gradient(135deg, #1c0171 0%, #a6c1ee 100%);
     }
+
+    /* الهيدر */
     header {
-      width: 95%;
-      max-width: 1200px;
-      margin: 20px auto 0;
-      padding: 15px 30px;
+      width: 100%;
+      margin: 0;
+      padding: 15px 10px;
       background: rgba(145, 167, 235, 0.85);
       backdrop-filter: blur(8px);
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
+
     header h1 {
       font-size: 2.1rem;
       font-weight: bold;
@@ -37,15 +47,20 @@
       text-align: center;
       width: 100%;
     }
+
+    /* المحتوى الرئيسي */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       width: 100%;
-      margin: 0 auto;
       justify-content: center;
+      padding: 15px;
+      box-sizing: border-box;
     }
+
+    /* صندوق تسجيل الدخول */
     .login-container {
       background: #fff;
       padding: 28px 22px 20px 22px;
@@ -53,18 +68,21 @@
       box-shadow: 0 8px 24px rgba(255,193,7,0.13);
       width: 100%;
       max-width: 340px;
-      margin: 40px auto 0 auto;
+      margin: 20px auto;
       animation: fadeIn 0.8s;
       display: flex;
       flex-direction: column;
       align-items: center;
+      box-sizing: border-box;
     }
+
     .login-container h2 {
       color: #ff9800;
       margin-bottom: 18px;
       font-size: 1.45rem;
       letter-spacing: 1px;
     }
+
     .login-container input {
       width: 100%;
       padding: 12px;
@@ -77,10 +95,12 @@
       font-family: inherit;
       outline: none;
     }
+
     .login-container input:focus {
       border-color: #ff9800;
-      outline: none;
+      box-shadow: 0 0 6px #ffeb3ba2;
     }
+
     .login-container button {
       width: 100%;
       padding: 12px;
@@ -95,20 +115,20 @@
       margin-bottom: 8px;
       letter-spacing: 1px;
     }
+
     .login-container button:hover {
       background: linear-gradient(90deg, #ffeb3b 10%, #ff9800 100%);
       color: #1c0171;
     }
+
     .login-container .error {
       color: #d32f2f;
       margin-bottom: 10px;
       font-size: 0.95rem;
       text-align: center;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.96);}
-      to { opacity: 1; transform: scale(1);}
-    }
+
+    /* الفوتر */
     footer {
       width: 100%;
       padding: 15px 8px;
@@ -117,22 +137,52 @@
       font-size: 13px;
       color: #1e1d1d;
       box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-      margin-top: 0;
       position: relative;
       z-index: 1;
     }
+
+    /* تحسينات الموبايل */
     @media (max-width: 600px) {
-      header h1 { font-size: 1.2rem;}
-      .login-container { max-width: 96vw; padding: 18px 2vw;}
-      .login-container h2 { font-size: 1.15rem;}
-      .login-container input, .login-container button { font-size: 0.95rem;}
+      header h1 {
+        font-size: 1.2rem;
+        line-height: 1.4;
+      }
+
+      .login-container {
+        max-width: 94vw;
+        padding: 18px 4vw;
+      }
+
+      .login-container h2 {
+        font-size: 1.15rem;
+      }
+
+      .login-container input,
+      .login-container button {
+        font-size: 0.95rem;
+        padding: 11px;
+      }
     }
+
     @media (max-width: 350px) {
-      header h1 { font-size: 0.9rem;}
-      .login-container { padding: 12px 1vw;}
-      .login-container input, .login-container button { font-size: 0.81rem;}
+      header h1 {
+        font-size: 0.9rem;
+      }
+
+      .login-container {
+        padding: 12px 3vw;
+      }
+
+      .login-container input,
+      .login-container button {
+        font-size: 0.81rem;
+      }
+    }
+
+    /* الأنيميشن */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.96);}
+      to { opacity: 1; transform: scale(1);}
     }
   </style>
 </head>
@@ -154,12 +204,12 @@
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
+
   <!-- Firebase Libraries -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script>
-    // إعداد Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
       authDomain: "kenz-activities.firebaseapp.com",
