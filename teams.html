@@ -6,7 +6,18 @@
   <title>تكوين الفرق | بوابة كنز للأنشطة الترفيهية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    html, body { height: 100%; margin: 0; padding: 0;}
+    /* ✅ ضبط الإعدادات الأساسية */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* 🔹 منع السكرول يمين وشمال */
+    }
     body {
       min-height: 100vh;
       display: flex;
@@ -14,8 +25,10 @@
       font-family: 'Cairo', sans-serif;
       background: linear-gradient(135deg, #1c0171 0%, #a6c1ee 100%);
     }
+
+    /* ✅ الهيدر */
     header {
-      width: 95%;
+      width: 100%;
       max-width: 1200px;
       margin: 20px auto 0;
       padding: 15px 30px;
@@ -37,14 +50,21 @@
       text-align: center;
       width: 100%;
     }
+
+    /* ✅ المحتوى الرئيسي */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: flex-start;
       width: 100%;
+      max-width: 1200px;
       margin: 0 auto;
+      padding: 20px 10px;
     }
+
+    /* ✅ أزرار الألعاب */
     .game-btns {
       display: flex;
       gap: 16px;
@@ -74,6 +94,8 @@
       border-color: #ff9800;
       transform: scale(1.04);
     }
+
+    /* ✅ البانيل */
     .section-panel {
       background: #fff;
       border-radius: 18px;
@@ -90,6 +112,8 @@
       text-align: center;
       font-weight: bold;
     }
+
+    /* ✅ الفورم */
     .team-form label {
       font-weight: bold;
       font-size: 1.05rem;
@@ -104,7 +128,6 @@
       border-radius: 10px;
       border: 1px solid #ccc;
       font-size: 1.05rem;
-      box-sizing: border-box;
       font-family: inherit;
       outline: none;
       margin-bottom: 8px;
@@ -114,6 +137,8 @@
       border-color: #ff9800;
       box-shadow: 0 0 6px #ffeb3ba2;
     }
+
+    /* ✅ قائمة اللاعبين */
     .players-list {
       display: flex;
       flex-direction: column;
@@ -163,110 +188,12 @@
       padding: 0 7px;
       margin-right: 4px;
     }
-    .players-hint {
-      font-size: 0.93em;
-      color: #888;
-      margin-bottom: 10px;
-      margin-top: 3px;
-      text-align: left;
-    }
-    .team-form .error {
-      color: #d32f2f;
-      font-size: 0.97em;
-      margin-bottom: 6px;
-      margin-top: 3px;
-      text-align: center;
-    }
-    .team-form .success {
-      color: #388e3c;
-      font-size: 0.99em;
-      margin-bottom: 6px;
-      margin-top: 3px;
-      text-align: center;
-    }
-    .team-form button {
-      width: 100%;
-      padding: 12px;
-      background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
-      color: #fff;
-      font-size: 1.13rem;
-      border: none;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
-      margin-top: 10px;
-      margin-bottom: 4px;
-    }
-    .team-form button:hover {
-      background: linear-gradient(90deg, #185a9d 10%, #43cea2 100%);
-      color: #fffde7;
-    }
-    .teams-list {
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 6px 16px #ffe08230;
-      padding: 22px 15px 12px 15px;
-      width: 100%;
-      max-width: 750px;
-      margin-bottom: 25px;
-      margin-top: 8px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .teams-list h3 {
-      color: #ff9800;
-      font-size: 1.18rem;
-      font-weight: bold;
-      margin-bottom: 15px;
-      text-align: center;
-    }
-    .team-card {
-      margin-bottom: 19px;
-      border-radius: 12px;
-      border: 1.5px solid #ffd600;
-      padding: 13px 10px 10px 10px;
-      background: #fffde7;
-      box-shadow: 0 2px 8px #fffde7;
-      animation: fadeIn 0.7s;
-    }
-    .team-card-title {
-      font-weight: bold;
-      color: #185a9d;
-      font-size: 1.13em;
-      margin-bottom: 8px;
-      letter-spacing: 0.6px;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      justify-content: center;
-    }
-    .team-card-members {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px 20px;
-      margin-bottom: 4px;
-      margin-top: 6px;
-      justify-content: center;
-    }
-    .team-member {
-      background: #fffbe6;
-      border-radius: 7px;
-      padding: 5px 12px;
-      color: #333;
-      font-size: 1em;
-      font-weight: 500;
-      letter-spacing: 0.2px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.97);}
-      to { opacity: 1; transform: scale(1);}
-    }
+
+    /* ✅ الفوتر */
     footer {
       width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
       padding: 15px 8px;
       background: rgba(255,255,255,0.95);
       text-align: center;
@@ -275,48 +202,88 @@
       box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
-      margin-top: 0;
-      position: relative;
-      z-index: 1;
+      margin-top: 10px;
     }
+
+    /* ✅ موبايل */
     @media (max-width: 700px) {
       header h1 { font-size: 1.3rem;}
-      .section-panel { padding: 13px 2vw; max-width: 99vw;}
-      .teams-list { padding: 6px 1vw; max-width: 99vw;}
+      .section-panel, .teams-list { padding: 13px 3vw; max-width: 95vw;}
       .team-card-title { font-size: 1em;}
     }
-    @media (max-width: 400px) {
-      th, td, .admin-filters, .admin-total, .export-btn, .logout-btn { font-size: 0.81em;}
-      .panel-container { padding: 4px 1vw;}
-      .section-panel { padding: 3vw 3vw;}
-      .teams-list { padding: 1vw 1vw;}
-      .team-card { padding: 7px 4px;}
-      .game-btn { font-size: 0.9rem; padding: 8px 11vw;}
-    }
+    /* ✅ تصميم عداد الفرق */
+#teams-count {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* ✅ تصميم الكروت */
+.team-card {
+  background: #fff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  margin-bottom: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+.team-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* ✅ اسم الفريق */
+.team-card-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+/* ✅ أسماء اللاعبين في Badges */
+.team-card-members {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+.team-member {
+  background-color: #f5f5f5;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #333;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ✅ ألوان الكروت حسب نوع اللعبة */
+.team-card[data-game="كرة قدم"] {
+  border-top: 5px solid #4caf50; /* أخضر */
+}
+.team-card[data-game="كرة طائرة"] {
+  border-top: 5px solid #2196f3; /* أزرق */
+}
+.team-card[data-game="كرة سلة"] {
+  border-top: 5px solid #ff9800; /* برتقالي */
+}
+
+/* ✅ أنيميشن */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
   </style>
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script>
-    // حماية الصفحة: التحقق من تسجيل الدخول
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-      authDomain: "kenz-activities.firebaseapp.com",
-      projectId: "kenz-activities",
-      storageBucket: "kenz-activities.firebasestorage.app",
-      messagingSenderId: "323107285981",
-      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-      measurementId: "G-YVS8P6LQVW"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (!user) {
-        window.location.href = "login.html?next=teams.html";
-      }
-    });
-  </script>
 </head>
 <body>
   <header>
@@ -343,19 +310,31 @@
     <div class="teams-list" id="teamsListSection" style="display:none;">
       <h3>قائمة الفرق المسجلة</h3>
       <div id="teamsCards"></div>
+
       <!-- زر تكوين المجموعات يظهر فقط لكرة القدم -->
       <div style="text-align:center; margin-top: 15px;" id="groupsButtonContainer" hidden>
-        <button class="game-btn" onclick="askGroupSize()" style="background:#4caf50; color:white; padding:10px 20px; border-radius:10px; border:none; font-size:1rem; cursor:pointer;">
-          🔀 تكوين المجموعات
-        </button>
+    <button class="game-btn" onclick="askGroupSize()" style="background:#4caf50; color:white; padding:10px 20px; border-radius:10px; border:none; font-size:1rem; cursor:pointer;">
+  🔀 تكوين المجموعات
+</button>
       </div>
+    </div>
     </div>
   </main>
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
   <script>
-    // ... باقي كود الصفحة كما هو بدون تغيير ...
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     // عناصر الصفحة
@@ -387,72 +366,101 @@
 
     // إظهار/إخفاء الفورم حسب اختيار اللعبة
     function selectGame(game) {
-      currentGame = game;
-      // تمييز الزر المختار
-      gameBtns.forEach(btn => {
-        if (btn.dataset.game === game) btn.classList.add('active');
-        else btn.classList.remove('active');
-      });
-      // تحديث عنوان الفورم
-      formGameTitle.textContent = `تكوين فريق جديد في ${GAME_TYPES[game].icon} ${game}`;
-      // إعادة تعيين الفورم
-      teamForm.reset();
-      playersList.innerHTML = '';
-      playersHint.textContent = 'انتظر تحميل اللاعبين...';
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-      saveTeamBtn.disabled = true;
-      selectedPlayers = [];
-      // إظهار الفورم
-      teamFormSection.style.display = '';
-      // جلب اللاعبين من قاعدة البيانات
-      fetchPlayersForGame(game);
-      // إظهار زر تكوين المجموعات فقط إذا كانت اللعبة كرة قدم
-      document.getElementById("groupsButtonContainer").hidden = (game !== "كرة قدم");
-    }
+  currentGame = game;
+  // تمييز الزر المختار
+  gameBtns.forEach(btn => {
+    if (btn.dataset.game === game) btn.classList.add('active');
+    else btn.classList.remove('active');
+  });
+  // تحديث عنوان الفورم
+  formGameTitle.textContent = `تكوين فريق جديد في ${GAME_TYPES[game].icon} ${game}`;
+  // إعادة تعيين الفورم
+  teamForm.reset();
+  playersList.innerHTML = '';
+  playersHint.textContent = 'انتظر تحميل اللاعبين...';
+  formError.style.display = 'none';
+  formSuccess.style.display = 'none';
+  saveTeamBtn.disabled = true;
+  selectedPlayers = [];
+  // إظهار الفورم
+  teamFormSection.style.display = '';
+  // جلب اللاعبين من قاعدة البيانات
+  fetchPlayersForGame(game);
+  // إظهار زر تكوين المجموعات فقط إذا كانت اللعبة كرة قدم
+  document.getElementById("groupsButtonContainer").hidden = (game !== "كرة قدم");
+}
+
 
     // جلب اللاعبين من قاعدة البيانات حسب نوع النشاط مع استبعاد من تم اختيارهم بالفعل
     function fetchPlayersForGame(game) {
-      playersList.innerHTML = '';
-      playersHint.textContent = 'انتظر تحميل اللاعبين...';
-      availablePlayers = [];
+  playersList.innerHTML = '';
+  playersHint.textContent = 'انتظر تحميل اللاعبين...';
+  availablePlayers = [];
 
-      db.collection('kenzTeams')
-        .where('game', '==', game)
+  // حدد إيميلات الأدمن
+  const adminEmails = [
+    "activity_admin@k.compound.com",
+    "fun25@kenzcompound.com"
+  ];
+  const currentUser = firebase.auth().currentUser;
+
+  // لو المستخدم أدمن → هات كل اللاعبين بدون فلترة
+  if (currentUser && adminEmails.includes(currentUser.email)) {
+    db.collection('kenzActivities')
+      .get()
+      .then(snapshot => {
+        availablePlayers = snapshot.docs.map(doc => ({
+          id: doc.data().userId,
+          name: doc.data().name,
+          unit: doc.data().unit,
+          birthdate: doc.data().birthdate
+        }));
+        renderPlayersList();
+      })
+      .catch(() => {
+        playersList.innerHTML = '';
+        playersHint.textContent = 'حدث خطأ أثناء تحميل اللاعبين';
+      });
+    return;
+  }
+
+  // لو مش أدمن → الكود القديم زي ما هو
+  db.collection('kenzTeams')
+    .where('game', '==', game)
+    .get()
+    .then(teamsSnapshot => {
+      let assignedUserIds = [];
+      teamsSnapshot.forEach(doc => {
+        const team = doc.data();
+        if (Array.isArray(team.players)) {
+          assignedUserIds.push(...team.players.map(player => player.id));
+        }
+      });
+
+      db.collection('kenzActivities')
+        .where('activities', 'array-contains', game)
         .get()
-        .then(teamsSnapshot => {
-          let assignedUserIds = [];
-          teamsSnapshot.forEach(doc => {
-            const team = doc.data();
-            if (Array.isArray(team.players)) {
-              assignedUserIds.push(...team.players.map(player => player.id));
-            }
-          });
-
-          db.collection('kenzActivities')
-            .where('activities', 'array-contains', game)
-            .get()
-            .then(snapshot => {
-              availablePlayers = snapshot.docs
-                .map(doc => ({
-                  id: doc.data().userId,
-                  name: doc.data().name,
-                  unit: doc.data().unit,
-                  birthdate: doc.data().birthdate // استخدام birthdate بدلاً من dateOfBirth
-                }))
-                .filter(player => !assignedUserIds.includes(player.id));
-              renderPlayersList();
-            })
-            .catch(() => {
-              playersList.innerHTML = '';
-              playersHint.textContent = 'حدث خطأ أثناء تحميل اللاعبين';
-            });
+        .then(snapshot => {
+          availablePlayers = snapshot.docs
+            .map(doc => ({
+              id: doc.data().userId,
+              name: doc.data().name,
+              unit: doc.data().unit,
+              birthdate: doc.data().birthdate
+            }))
+            .filter(player => !assignedUserIds.includes(player.id));
+          renderPlayersList();
         })
         .catch(() => {
           playersList.innerHTML = '';
           playersHint.textContent = 'حدث خطأ أثناء تحميل اللاعبين';
         });
-    }
+    })
+    .catch(() => {
+      playersList.innerHTML = '';
+      playersHint.textContent = 'حدث خطأ أثناء تحميل اللاعبين';
+    });
+}
 
     // رسم قائمة اللاعبين مع Checkboxes ويعرض الاسم والكود وتاريخ الميلاد
     function renderPlayersList() {
@@ -582,40 +590,52 @@
 
     // رسم قائمة الفرق في الصفحة (فقط اسم الفريق وأسماء اللاعبين)
     function renderTeamsList() {
-      teamsCards.innerHTML = '';
-      if (!teamsData.length) {
-        teamsCards.innerHTML = '<div style="color:#888;text-align:center;">لا توجد فرق مسجلة بعد.</div>';
-        return;
-      }
-      teamsData.forEach(team => {
-        const card = document.createElement('div');
-        card.className = 'team-card';
-        card.innerHTML = `
-          <div class="team-card-title">
-            <span>${team.teamName}</span>
-          </div>
-          <div class="team-card-members">
-            ${team.players.map(player =>
-              `<span class="team-member">${player.name}</span>`
-            ).join('')}
-          </div>
-        `;
-        teamsCards.appendChild(card);
-      });
-    }
+  teamsCards.innerHTML = '';
+
+  // ✅ عداد الفرق
+  const teamsCount = document.createElement('h3');
+  teamsCount.id = 'teams-count';
+  teamsCount.textContent = `🔹 عدد الفرق المسجلة: ${teamsData.length}`;
+  teamsCards.appendChild(teamsCount);
+
+  if (!teamsData.length) {
+    teamsCards.innerHTML += '<div style="color:#888;text-align:center;">لا توجد فرق مسجلة بعد.</div>';
+    return;
+  }
+
+  teamsData.forEach(team => {
+    const card = document.createElement('div');
+    card.className = 'team-card';
+    card.setAttribute("data-game", team.game);
+
+    card.innerHTML = `
+      <div class="team-card-title">${team.teamName}</div>
+      <div class="team-card-members">
+        ${team.players.map(player =>
+          `<span class="team-member">${player.name}</span>`
+        ).join('')}
+      </div>
+    `;
+
+    teamsCards.appendChild(card);
+  });
+}
 
     document.addEventListener('DOMContentLoaded', () => {
       gameBtns[0].click();
     });
     function askGroupSize() {
-      const input = prompt("كم عدد الفرق في كل مجموعة؟");
-      const size = parseInt(input);
-      if (!isNaN(size) && size > 0) {
-        window.location.href = `groups.html?groupSize=${size}`;
-      } else {
-        alert("يرجى إدخال رقم صالح (أكبر من 0).");
-      }
-    }
+  const input = prompt("كم عدد الفرق في كل مجموعة؟ (يفضل 2 أو 3)");
+  if (input === null) return;
+
+  const size = parseInt(input, 10);
+  if (!isNaN(size) && size > 0) {
+    // نبعته في الرابط
+    window.location.href = `groups.html?groupSize=${size}`;
+  } else {
+    alert("يرجى إدخال رقم صالح (أكبر من 0).");
+  }
+}
   </script>
 </body>
 </html>
