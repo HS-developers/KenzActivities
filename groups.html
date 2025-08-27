@@ -6,165 +6,211 @@
   <title>دوري أبطال كنز لكرة القدم - المجموعات</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    body {
-      min-height: 100vh;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #086fbe 0%, #e3e3e3 100%);
-      font-family: 'Cairo', sans-serif;
-      display: flex;
-      flex-direction: column;
-    }
-    header {
-      width: 96%;
-      margin: 20px auto 0;
-      background: rgba(9, 35, 84, 0.93);
-      border-radius: 16px;
-      box-shadow: 0 4px 16px #00000040;
-      text-align: center;
-      padding: 18px 10px 16px 10px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2.2rem;
-      font-weight: bold;
-      color: #ffd700;
-      letter-spacing: 1.2px;
-      text-shadow: 0 2px 10px #293b5f, 0 0px 0 #fff;
-      background: linear-gradient(90deg, #ffd700 50%, #ffffff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .champion-cup {
-      font-size: 2.5em;
-      vertical-align: middle;
-      margin: 0 8px;
-      color: #fff;
-      text-shadow: 0 2px 8px #ffd700d0;
-    }
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      margin: 0 auto;
-    }
-    .groups-title {
-      margin: 24px 0 7px 0;
-      font-size: 1.35rem;
-      color: #0d2847;
-      font-weight: bold;
-      text-align: center;
-      background: linear-gradient(90deg, #ffd700 30%, #ffffff 70%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 1.5px;
-    }
+  /* ✅ إعدادات أساسية */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden; /* 🔹 منع السكرول يمين وشمال */
+  }
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #086fbe 0%, #e3e3e3 100%);
+    font-family: 'Cairo', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ✅ الهيدر */
+  header {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto 0;
+    background: rgba(9, 35, 84, 0.93);
+    border-radius: 16px;
+    box-shadow: 0 4px 16px #00000040;
+    text-align: center;
+    padding: 18px 10px 16px 10px;
+  }
+  header h1 {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: #ffd700;
+    letter-spacing: 1.2px;
+    text-shadow: 0 2px 10px #293b5f, 0 0px 0 #fff;
+    background: linear-gradient(90deg, #ffd700 50%, #ffffff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .champion-cup {
+    font-size: 2.5em;
+    vertical-align: middle;
+    margin: 0 8px;
+    color: #fff;
+    text-shadow: 0 2px 8px #ffd700d0;
+  }
+
+  /* ✅ المحتوى */
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 12px;
+  }
+  .groups-title {
+    margin: 24px 0 7px 0;
+    font-size: 1.35rem;
+    color: #0d2847;
+    font-weight: bold;
+    text-align: center;
+    background: linear-gradient(90deg, #ffd700 30%, #ffffff 70%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1.5px;
+  }
+
+  /* ✅ حاوية المجموعات */
+  .groups-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.group-card {
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.group-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.group-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 12px;
+  color: #1e88e5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-count {
+  font-size: 0.85rem;
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.team-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-list li {
+  display: flex;
+  align-items: center;
+  background: #f7f9fc;
+  padding: 8px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  transition: background 0.2s ease;
+}
+
+.team-list li:hover {
+  background: #e3f2fd;
+}
+
+.team-icon {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+.badge {
+  margin-left: auto;
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.badge-football {
+  background: #43a047; /* أخضر لكرة القدم */
+}
+
+.badge-basketball {
+  background: #ef6c00; /* برتقالي لكرة السلة */
+}
+
+.badge-chess {
+  background: #6a1b9a; /* بنفسجي للشطرنج */
+}
+
+
+  /* ✅ رسالة عدم وجود مجموعات */
+  .no-groups-msg {
+    color: #888;
+    text-align: center;
+    margin: 18px 0 30px 0;
+    font-size: 1.14em;
+  }
+
+  /* ✅ الفوتر */
+  footer {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 8px;
+    background: rgba(255,255,255,0.94);
+    text-align: center;
+    font-size: 14px;
+    color: #1e1d1d;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+  }
+
+  /* ✅ حركة لطيفة للبطاقات */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.97); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  /* ✅ تحسين العرض على الموبايل */
+  @media (max-width: 900px) {
+    header h1 { font-size: 1.6rem; }
     .groups-container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 32px 46px;
-      margin: 10px 0 30px 0;
-      width: 100%;
-      max-width: 1400px;
-    }
-    .group-card {
-      background: linear-gradient(135deg, #fffbe7 0%, #e3e3e3 100%);
-      border-radius: 13px;
-      box-shadow: 0 6px 32px #0d284733, 0 1.5px 0 #ffd700;
-      min-width: 260px;
-      max-width: 320px;
-      padding: 15px 15px 12px 15px;
-      border-top: 4.5px solid #ffd700;
-      border-bottom: 2px solid #0d2847;
-      animation: fadeIn 0.6s;
-    }
-    .group-name {
-      font-size: 1.18rem;
-      color: #0d2847;
-      font-weight: bold;
-      margin-bottom: 13px;
-      text-align: center;
-      letter-spacing: 1.2px;
-      background: linear-gradient(90deg, #ffd700 60%, #ffffff 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .team-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      font-size: 1.09em;
-    }
-    .team-list li {
-      background: #eaf1fb;
-      margin-bottom: 9px;
-      border-radius: 7px;
-      padding: 8px 15px;
-      color: #234a7a;
-      font-weight: 600;
-      letter-spacing: 0.2px;
-      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
+      gap: 22px;
     }
-    .team-icon {
-      font-size: 1.15em;
-      color: #ffd700;
-      text-shadow: 0 1px 4px #293b5f70;
-    }
-    .no-groups-msg {
-      color: #888;
-      text-align: center;
-      margin: 18px 0 30px 0;
-      font-size: 1.14em;
-    }
-    footer {
-      width: 100%;
-      padding: 15px 8px;
-      background: rgba(255,255,255,0.94);
-      text-align: center;
-      font-size: 14px;
-      color: #1e1d1d;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.07);
-      border-top-left-radius: 15px;
-      border-top-right-radius: 15px;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.97); }
-      to { opacity: 1; transform: scale(1); }
-    }
-    @media (max-width: 900px) {
-      .groups-container { flex-direction: column; align-items: center; gap: 22px; }
-      .group-card { max-width: 98vw; }
-    }
-  </style>
+    .group-card { max-width: 95vw; width: 100%; }
+  }
+</style>
+
 
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
-  <script>
-    // حماية الصفحة: التحقق من تسجيل الدخول
-    const firebaseConfig = {
-      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
-      authDomain: "kenz-activities.firebaseapp.com",
-      projectId: "kenz-activities",
-      storageBucket: "kenz-activities.firebasestorage.app",
-      messagingSenderId: "323107285981",
-      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
-      measurementId: "G-YVS8P6LQVW"
-    };
-    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (!user) {
-        window.location.href = "login.html?next=groups.html";
-      }
-    });
-  </script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 </head>
 <body>
   <header>
@@ -184,13 +230,28 @@
   </footer>
 
   <script>
-    // Firebase config (موجود بالفعل أعلاه)
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwc25f6ESvUx7Po55Mm9PQYZDT3L52dg8",
+      authDomain: "kenz-activities.firebaseapp.com",
+      projectId: "kenz-activities",
+      storageBucket: "kenz-activities.firebasestorage.app",
+      messagingSenderId: "323107285981",
+      appId: "1:323107285981:web:0f1cad98fb5ab5ef306434",
+      measurementId: "G-YVS8P6LQVW"
+    };
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     const groupsContainer = document.getElementById('groupsContainer');
     const noGroupsMsg = document.getElementById('noGroupsMsg');
 
     let teamsPerGroup = 2;
+
+    // اقرأ قيمة groupSize من الرابط إن وُجد
+const urlParams = new URLSearchParams(window.location.search);
+const size = parseInt(urlParams.get('groupSize'), 10);
+if (!isNaN(size) && size >= 1) teamsPerGroup = size; // اقبل 1 كحد أدنى
 
     // تقسيم الفرق إلى مجموعات
     function splitTeamsToGroups(teams, perGroup) {
@@ -202,55 +263,109 @@
       return groups;
     }
 
-    // عرض المجموعات
-    function renderGroups(groups) {
-      groupsContainer.innerHTML = '';
-      groups.forEach((group, idx) => {
-        const groupCard = document.createElement('div');
-        groupCard.className = 'group-card';
-        groupCard.innerHTML = `
-          <div class="group-name">المجموعة ${String.fromCharCode(65 + idx)}</div>
-          <ul class="team-list">
-            ${group.map(team => `<li><span class="team-icon">⚽</span>${team.teamName}</li>`).join('')}
-          </ul>
-        `;
-        groupsContainer.appendChild(groupCard);
+    // عرض المجموعات (تحسين: عرض رسالة لو المصفوفة فارغة)
+function renderGroups(groups) {
+  groupsContainer.innerHTML = '';
+  if (!Array.isArray(groups) || groups.length === 0) {
+    groupsContainer.innerHTML = '<div class="no-groups-msg">لا توجد مجموعات لعرضها.</div>';
+    return;
+  }
+  groups.forEach((group, idx) => {
+    const groupCard = document.createElement('div');
+    groupCard.className = 'group-card';
+    groupCard.innerHTML = `
+      <div class="group-name">المجموعة ${String.fromCharCode(65 + idx)}</div>
+      <ul class="team-list">
+        ${group.map(team => `<li><span class="team-icon">⚽</span>${team.teamName || team.name || 'رقم فريق'}</li>`).join('')}
+      </ul>
+    `;
+    groupsContainer.appendChild(groupCard);
+  });
+}
+
+// جلب الفرق وعرضها مع تسجيل مفصّل للأخطاء
+function fetchFootballTeams() {
+  // وضع رسالة تحميل مؤقتة
+  groupsContainer.innerHTML = '<div style="text-align:center;color:#888;">جاري تحميل المجموعات...</div>';
+
+  db.collection('kenzTeams')
+    .where('game', '==', 'كرة قدم')
+    .get()
+    .then(snapshot => {
+      console.log('fetchFootballTeams: snapshot.size =', snapshot.size);
+      const teams = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return Object.assign({ _id: doc.id }, data);
       });
-    }
 
-    // تحميل الفرق وعرضها
-    function fetchFootballTeams() {
-      db.collection('kenzTeams')
-        .where('game', '==', 'كرة قدم')
-        .get()
-        .then(snapshot => {
-          const teams = snapshot.docs.map(doc => doc.data());
-          if (!teams.length) {
-            groupsContainer.innerHTML = '';
-            noGroupsMsg.style.display = '';
-            return;
-          }
-          noGroupsMsg.style.display = 'none';
-          const groups = splitTeamsToGroups(teams, teamsPerGroup);
-          renderGroups(groups);
-        })
-        .catch(() => {
-          groupsContainer.innerHTML = '<div class="no-groups-msg">حدث خطأ أثناء تحميل المجموعات</div>';
-        });
-    }
-
-    // عند تحميل الصفحة
-    document.addEventListener('DOMContentLoaded', () => {
-      if (typeof window.promptShown === 'undefined') {
-        window.promptShown = true;
-        let input = prompt("كم عدد الفرق في كل مجموعة؟ (يفضل 2 أو 3)");
-        let num = parseInt(input);
-        if (!isNaN(num) && num >= 2) {
-          teamsPerGroup = num;
-        }
+      // لا فرق
+      if (!teams.length) {
+        groupsContainer.innerHTML = '';
+        noGroupsMsg.style.display = '';
+        return;
       }
-      fetchFootballTeams();
+
+      noGroupsMsg.style.display = 'none';
+
+      // إذا كان عدد الفرق أقل من teamsPerGroup فاجعلهم كلهم في مجموعة واحدة
+      if (teams.length <= teamsPerGroup) {
+        teamsPerGroup = teams.length;
+      }
+
+      // حالة فريق واحد فقط — ضع كل الفرق في مجموعة واحدة
+      const groups = teams.length === 1 ? [teams] : splitTeamsToGroups(teams, teamsPerGroup);
+
+      console.log('fetchFootballTeams: teams.length =', teams.length, ' -> groups.length =', groups.length, 'teamsPerGroup=', teamsPerGroup);
+      renderGroups(groups);
+    })
+    .catch(error => {
+      // اطبع السبب الحقيقي في الكونسول عشان نعرف إذا كانت قواعد الأمان هي السبب
+      console.error('fetchFootballTeams error:', error);
+      // لو الخطأ permission-denied، اعرض رسالة أوضح للمستخدم
+      if (error && error.code === 'permission-denied') {
+        groupsContainer.innerHTML = '<div class="no-groups-msg">ليس لديك صلاحية لعرض المجموعات — يرجى تسجيل الدخول كأدمن.</div>';
+      } else {
+        groupsContainer.innerHTML = '<div class="no-groups-msg">حدث خطأ أثناء تحميل المجموعات</div>';
+      }
     });
+}
+
+// **المهم**: ننتظر حدث Auth state لأن قواعدك قد تعتمد على request.auth
+firebase.auth().onAuthStateChanged((user) => {
+  console.log('Auth state changed, user =', user ? user.email : null);
+
+  // لو القواعد تمنع غير الأدمنين، نتحقق إذا المستخدم مسجل
+  if (!user) {
+    // لو تريد إعادة التوجيه لصفحة الدخول ضع هنا redirect
+    // window.location.href = 'login.html';
+    // أما الآن، نعرض رسالة أن الدخول مطلوب
+    groupsContainer.innerHTML = '<div class="no-groups-msg">الرجاء تسجيل الدخول لعرض المجموعات.</div>';
+    return;
+  }
+
+  // لو كنت تستعمل قائمة إيميلات للأدمن فقط، تحقق (اختياري)
+  const adminEmails = ['activity_admin@k.compound.com', 'fun25@kenzcompound.com'];
+  if (!adminEmails.includes(user.email)) {
+    console.warn('المستخدم مسجل، ولكن إيميل المستخدم ليس من قائمة الأدمن. قواعد Firestore قد تمنع الوصول.');
+    // نسمح بالمحاولة لأن القواعد قد تسمح أيضاً، لكن ننبهك
+  }
+
+  // بعد التأكد من وجود user، ننفّذ الجلب
+  fetchFootballTeams();
+});
+
+// عند تحميل الصفحة
+document.addEventListener('DOMContentLoaded', () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const size = parseInt(urlParams.get('groupSize'));
+
+  if (!isNaN(size) && size >= 2) {
+    teamsPerGroup = size;
+  }
+  fetchFootballTeams();
+});
+
+
   </script>
 </body>
 </html>
