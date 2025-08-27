@@ -279,6 +279,38 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ✅ تصميم زر حفظ الفريق */
+#saveTeamBtn {
+  /* ✅ خصائص جديدة لإضافة تأثير ذهبي */
+  background: linear-gradient(90deg, #ff9800 40%, #ffd600 100%);
+  border: 2px solid #ffd600;
+  box-shadow: 0px 4px 18px #ffe082b0;
+  color: #fff;
+  font-size: 1.15rem;
+  font-weight: bold;
+  letter-spacing: 1px;
+  outline: none;
+  padding: 13px 38px;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: background 0.3s, color 0.3s, transform 0.2s;
+}
+
+#saveTeamBtn:hover:not([disabled]) {
+  background: linear-gradient(90deg, #ffd600 30%, #ff9800 100%);
+  color: #663c00;
+  border-color: #ff9800;
+  transform: scale(1.04);
+  /* ⚠️ يمكن حذف box-shadow إذا لم تكن بحاجة إليها */
+  box-shadow: 0px 4px 18px #ff9800a2;
+}
+
+#saveTeamBtn:disabled {
+  background-color: #bdbdbd; /* لون رمادي عند التعطيل */
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
   </style>
   <!-- Firebase -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -404,26 +436,6 @@
   ];
   const currentUser = firebase.auth().currentUser;
 
-  // لو المستخدم أدمن → هات كل اللاعبين بدون فلترة
-  if (currentUser && adminEmails.includes(currentUser.email)) {
-    db.collection('kenzActivities')
-      .get()
-      .then(snapshot => {
-        availablePlayers = snapshot.docs.map(doc => ({
-          id: doc.data().userId,
-          name: doc.data().name,
-          unit: doc.data().unit,
-          birthdate: doc.data().birthdate
-        }));
-        renderPlayersList();
-      })
-      .catch(() => {
-        playersList.innerHTML = '';
-        playersHint.textContent = 'حدث خطأ أثناء تحميل اللاعبين';
-      });
-    return;
-  }
-
   // لو مش أدمن → الكود القديم زي ما هو
   db.collection('kenzTeams')
     .where('game', '==', game)
@@ -495,146 +507,150 @@
 
     function handlePlayerSelection() {
       // تحديث قائمة اللاعبين المختارين
-      const checked = Array.from(playersList.querySelectorAll('input[type="checkbox"]:checked'));
-      selectedPlayers = checked.map(cb => ({
-        id: cb.value,
-        name: cb.getAttribute('data-name')
-      }));
-      saveTeamBtn.disabled = !(selectedPlayers.length >= 4 && selectedPlayers.length <= 6 && teamNameInput.value.trim());
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-    }
+      const checked = Array.from(playersList.querySelectorAll('input[type="checkbox"]:checked'));
+      selectedPlayers = checked.map(cb => ({
+        id: cb.value,
+        name: cb.getAttribute('data-name')
+      }));
+      saveTeamBtn.disabled = !(selectedPlayers.length >= 4 && selectedPlayers.length <= 6 && teamNameInput.value.trim());
+      formError.style.display = 'none';
+      formSuccess.style.display = 'none';
+    }
 
-    // تمكين زر الحفظ إذا كان عدد اللاعبين صحيح واسم الفريق موجود
-    teamNameInput.addEventListener('input', () => {
-      saveTeamBtn.disabled = !(selectedPlayers.length >= 4 && selectedPlayers.length <= 6 && teamNameInput.value.trim());
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-    });
+    // تمكين زر الحفظ إذا كان عدد اللاعبين صحيح واسم الفريق موجود
+    teamNameInput.addEventListener('input', () => {
+      saveTeamBtn.disabled = !(selectedPlayers.length >= 4 && selectedPlayers.length <= 6 && teamNameInput.value.trim());
+      formError.style.display = 'none';
+      formSuccess.style.display = 'none';
+    });
 
-    // عند الضغط على زر حفظ الفريق
-    teamForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      formError.style.display = 'none';
-      formSuccess.style.display = 'none';
-      const teamName = teamNameInput.value.trim();
-      if (!teamName) {
-        formError.textContent = 'يرجى إدخال اسم الفريق';
-        formError.style.display = '';
-        return;
-      }
-      if (selectedPlayers.length < 4 || selectedPlayers.length > 6) {
-        formError.textContent = 'عدد اللاعبين يجب أن يكون من 4 إلى 6 لاعبين';
-        formError.style.display = '';
-        return;
-      }
-      // تحقق من عدم تكرار اسم الفريق لنفس اللعبة
-      db.collection('kenzTeams')
-        .where('game', '==', currentGame)
-        .where('teamName', '==', teamName)
-        .get()
-        .then(snapshot => {
-          if (!snapshot.empty) {
-            formError.textContent = 'اسم الفريق مستخدم بالفعل في هذه اللعبة';
-            formError.style.display = '';
-            return;
-          }
-          // حفظ الفريق (هنا استخدمنا Timestamp الصحيح)
-          db.collection('kenzTeams').add({
-            teamName: teamName,
-            game: currentGame,
-            players: selectedPlayers,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp()
-          }).then(() => {
-            formSuccess.textContent = 'تم حفظ الفريق بنجاح!';
-            formSuccess.style.display = '';
-            formError.style.display = 'none';
-            teamForm.reset();
-            saveTeamBtn.disabled = true;
-            selectedPlayers = [];
-            setTimeout(() => { loadTeamsList(); fetchPlayersForGame(currentGame); }, 1200);
-          }).catch(() => {
-            formError.textContent = 'حدث خطأ أثناء حفظ الفريق. حاول مرة أخرى.';
-            formError.style.display = '';
-          });
-        });
-    });
+    // عند الضغط على زر حفظ الفريق
+    teamForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      formError.style.display = 'none';
+      formSuccess.style.display = 'none';
+      const teamName = teamNameInput.value.trim();
+      if (!teamName) {
+        formError.textContent = 'يرجى إدخال اسم الفريق';
+        formError.style.display = '';
+        return;
+      }
+      if (selectedPlayers.length < 4 || selectedPlayers.length > 6) {
+        formError.textContent = 'عدد اللاعبين يجب أن يكون من 4 إلى 6 لاعبين';
+        formError.style.display = '';
+        return;
+      }
+      // تحقق من عدم تكرار اسم الفريق لنفس اللعبة
+      db.collection('kenzTeams')
+        .where('game', '==', currentGame)
+        .where('teamName', '==', teamName)
+        .get()
+        .then(snapshot => {
+          if (!snapshot.empty) {
+            formError.textContent = 'اسم الفريق مستخدم بالفعل في هذه اللعبة';
+            formError.style.display = '';
+            return;
+          }
+          // حفظ الفريق (هنا استخدمنا Timestamp الصحيح)
+          db.collection('kenzTeams').add({
+            teamName: teamName,
+            game: currentGame,
+            players: selectedPlayers,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }).then(() => {
+            formSuccess.textContent = 'تم حفظ الفريق بنجاح!';
+            formSuccess.style.display = '';
+            formError.style.display = 'none';
+            teamForm.reset();
+            saveTeamBtn.disabled = true;
+            selectedPlayers = [];
+            
+             // ✅ تم إزالة setTimeout واستدعاء الدوال مباشرةً
+            fetchPlayersForGame(currentGame);
+             loadTeamsList();
 
-    // عند الضغط على زر نوع اللعبة
-    gameBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectGame(btn.dataset.game);
-        loadTeamsList();
-      });
-    });
+          }).catch(() => {
+            formError.textContent = 'حدث خطأ أثناء حفظ الفريق. حاول مرة أخرى.';
+            formError.style.display = '';
+          });
+        });
+    });
 
-    // تحميل قائمة الفرق من قاعدة البيانات (بدون orderBy مؤقتًا)
-    function loadTeamsList() {
-      if (!currentGame) {
-        teamsListSection.style.display = 'none';
-        return;
-      }
-      teamsCards.innerHTML = '<div style="text-align:center;font-size:1em;color:#888">جاري التحميل...</div>';
-      teamsListSection.style.display = '';
-      db.collection('kenzTeams')
-        .where('game', '==', currentGame)
-        .get()
-        .then(snapshot => {
-          teamsData = snapshot.docs.map(doc => doc.data());
-          renderTeamsList();
-        })
-        .catch(() => {
-          teamsCards.innerHTML = '<div style="color:#d32f2f;text-align:center;">حدث خطأ أثناء تحميل الفرق</div>';
-        });
-    }
+    // عند الضغط على زر نوع اللعبة
+    gameBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        selectGame(btn.dataset.game);
+        loadTeamsList();
+      });
+    });
 
-    // رسم قائمة الفرق في الصفحة (فقط اسم الفريق وأسماء اللاعبين)
-    function renderTeamsList() {
-  teamsCards.innerHTML = '';
+    // تحميل قائمة الفرق من قاعدة البيانات (بدون orderBy مؤقتًا)
+    function loadTeamsList() {
+      if (!currentGame) {
+        teamsListSection.style.display = 'none';
+        return;
+      }
+      teamsCards.innerHTML = '<div style="text-align:center;font-size:1em;color:#888">جاري التحميل...</div>';
+      teamsListSection.style.display = '';
+      db.collection('kenzTeams')
+        .where('game', '==', currentGame)
+        .get()
+        .then(snapshot => {
+          teamsData = snapshot.docs.map(doc => doc.data());
+          renderTeamsList();
+        })
+        .catch(() => {
+          teamsCards.innerHTML = '<div style="color:#d32f2f;text-align:center;">حدث خطأ أثناء تحميل الفرق</div>';
+        });
+    }
 
-  // ✅ عداد الفرق
-  const teamsCount = document.createElement('h3');
-  teamsCount.id = 'teams-count';
-  teamsCount.textContent = `🔹 عدد الفرق المسجلة: ${teamsData.length}`;
-  teamsCards.appendChild(teamsCount);
+    // رسم قائمة الفرق في الصفحة (فقط اسم الفريق وأسماء اللاعبين)
+    function renderTeamsList() {
+  teamsCards.innerHTML = '';
 
-  if (!teamsData.length) {
-    teamsCards.innerHTML += '<div style="color:#888;text-align:center;">لا توجد فرق مسجلة بعد.</div>';
-    return;
-  }
+  // ✅ عداد الفرق
+  const teamsCount = document.createElement('h3');
+  teamsCount.id = 'teams-count';
+  teamsCount.textContent = `🔹 عدد الفرق المسجلة: ${teamsData.length}`;
+  teamsCards.appendChild(teamsCount);
 
-  teamsData.forEach(team => {
-    const card = document.createElement('div');
-    card.className = 'team-card';
-    card.setAttribute("data-game", team.game);
+  if (!teamsData.length) {
+    teamsCards.innerHTML += '<div style="color:#888;text-align:center;">لا توجد فرق مسجلة بعد.</div>';
+    return;
+  }
 
-    card.innerHTML = `
-      <div class="team-card-title">${team.teamName}</div>
-      <div class="team-card-members">
-        ${team.players.map(player =>
-          `<span class="team-member">${player.name}</span>`
-        ).join('')}
-      </div>
-    `;
+  teamsData.forEach(team => {
+    const card = document.createElement('div');
+    card.className = 'team-card';
+    card.setAttribute("data-game", team.game);
 
-    teamsCards.appendChild(card);
-  });
+    card.innerHTML = `
+      <div class="team-card-title">${team.teamName}</div>
+      <div class="team-card-members">
+        ${team.players.map(player =>
+          `<span class="team-member">${player.name}</span>`
+        ).join('')}
+      </div>
+    `;
+
+    teamsCards.appendChild(card);
+  });
 }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      gameBtns[0].click();
-    });
-    function askGroupSize() {
-  const input = prompt("كم عدد الفرق في كل مجموعة؟ (يفضل 2 أو 3)");
-  if (input === null) return;
+    document.addEventListener('DOMContentLoaded', () => {
+      gameBtns[0].click();
+    });
+    function askGroupSize() {
+  const input = prompt("كم عدد الفرق في كل مجموعة؟ (يفضل 2 أو 3)");
+  if (input === null) return;
 
-  const size = parseInt(input, 10);
-  if (!isNaN(size) && size > 0) {
-    // نبعته في الرابط
-    window.location.href = `groups.html?groupSize=${size}`;
-  } else {
-    alert("يرجى إدخال رقم صالح (أكبر من 0).");
-  }
+  const size = parseInt(input, 10);
+  if (!isNaN(size) && size > 0) {
+    // نبعته في الرابط
+    window.location.href = `groups.html?groupSize=${size}`;
+  } else {
+    alert("يرجى إدخال رقم صالح (أكبر من 0).");
+  }
 }
   </script>
 </body>
