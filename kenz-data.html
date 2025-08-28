@@ -271,9 +271,44 @@
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
   }
+
+  #userIdBox {
+      margin: 10px 0;
+      padding: 10px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      font-weight: bold;
+      display: none;
+    }
+
+    .save-warning {
+      background: #fff3cd;
+      padding: 8px;
+      margin-top: 10px;
+      border-radius: 5px;
+      border: 1px solid #ffeeba;
+      color: #856404;
+    }
+
+    .pdf-btn {
+      margin-top: 15px;
+      padding: 8px 12px;
+      background-color: #007bff;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .pdf-btn:hover {
+      background-color: #0056b3;
+    }
+
 </style>
 
-  <!-- jsPDF -->
+<!-- jsPDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
@@ -285,6 +320,7 @@
     <div id="userIdBox" class="user-id-box"></div>
     <div id="saveWarning" class="save-warning" style="display:none;">احفظ رقمك كويس لانك هتستخدمه في كل انشطتك</div>
     <button id="pdfBtn" class="pdf-btn" style="display:none;">حفظ بياناتي PDF</button>
+
     <form id="kenzDataForm" autocomplete="off">
       <input type="text" id="name" placeholder="👤 الاسم بالكامل" required>
       <input type="tel" id="phone" placeholder="📞 رقم التليفون" required pattern="^[0-9+\- ]{8,}$" title="أدخل رقم هاتف صحيح" style="direction: rtl; text-align: right;">
@@ -317,6 +353,7 @@
   <footer>
     Copyright © 2025 GENIUS Tech All Rights Reserved
   </footer>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
@@ -356,6 +393,17 @@
       const goToEditPage = document.getElementById('goToEditPage');
       let lastUserData = null;
 
+      // تحقق إذا كان المستخدم مسجل بالفعل
+      const storedUser = JSON.parse(localStorage.getItem("kenzUser"));
+      if (storedUser) {
+        form.style.display = "none";
+        userIdBox.innerHTML = `✅ أنت مسجل بالفعل!<br>رقمك الخاص في النظام: <span dir="ltr" style="font-family:monospace;color:#bf8c18">${storedUser.userId}</span>`;
+        userIdBox.style.display = "flex";
+        pdfBtn.style.display = "inline-block";
+        saveWarning.style.display = "inline-block";
+        lastUserData = storedUser;
+      }
+
       function updateBirthdateRequirement() {
         const selected = Array.from(activitySelect.selectedOptions).map(opt => opt.value);
         const needsBirthdate = selected.some(
@@ -382,10 +430,14 @@
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        if (localStorage.getItem("kenzUser")) {
+          errorDiv.textContent = "❌ أنت مسجل بالفعل ولا يمكنك التسجيل مرة أخرى من نفس الجهاز.";
+          return;
+        }
+
         errorDiv.textContent = '';
         successDiv.textContent = '';
         userIdBox.style.display = 'none';
-        userIdBox.textContent = '';
         saveWarning.style.display = 'none';
         pdfBtn.style.display = 'none';
         lastUserData = null;
@@ -397,22 +449,11 @@
         const selectedActivities = Array.from(activitySelect.selectedOptions).map(opt => opt.value);
         const extraInfo = extraInfoInput.value.trim();
 
-        if (!name) {
-          errorDiv.textContent = "يرجى إدخال الاسم بالكامل.";
-          return;
-        }
-        if (!phone) {
-          errorDiv.textContent = "يرجى إدخال رقم التليفون.";
-          return;
-        }
-        if (!unit) {
-          errorDiv.textContent = "يرجى إدخال رقم الوحدة.";
-          return;
-        }
-        if (selectedActivities.length === 0) {
-          errorDiv.textContent = "يرجى اختيار نوع النشاط.";
-          return;
-        }
+        if (!name) { errorDiv.textContent = "يرجى إدخال الاسم بالكامل."; return; }
+        if (!phone) { errorDiv.textContent = "يرجى إدخال رقم التليفون."; return; }
+        if (!unit) { errorDiv.textContent = "يرجى إدخال رقم الوحدة."; return; }
+        if (selectedActivities.length === 0) { errorDiv.textContent = "يرجى اختيار نوع النشاط."; return; }
+
         const needsBirthdate = selectedActivities.some(
           v => v !== 'قيادة دراجات' && v !== 'شطرنج' && v !== 'بازارات/جراج سيل'
         );
@@ -435,15 +476,17 @@
             birthdate: birthdate || null,
             createdAt: new Date()
           });
-          successDiv.textContent = "✅ تم إرسال البيانات بنجاح!";          userIdBox.innerHTML = `رقمك الخاص في النظام: <span dir="ltr" style="font-family:monospace;color:#bf8c18">${userId}</span><br>الأنشطة المسجلة: <span style="color:#007bff">${selectedActivities.join(' - ')}</span>`;
+
+          const userData = { userId, phone, unit };
+          localStorage.setItem("kenzUser", JSON.stringify(userData));
+
+          successDiv.textContent = "✅ تم إرسال البيانات بنجاح!";
+          userIdBox.innerHTML = `رقمك الخاص في النظام: <span dir="ltr" style="font-family:monospace;color:#bf8c18">${userId}</span><br>الأنشطة المسجلة: <span style="color:#007bff">${selectedActivities.join(' - ')}</span>`;
           userIdBox.style.display = 'flex';
           saveWarning.style.display = 'inline-block';
           pdfBtn.style.display = 'inline-block';
-          lastUserData = {
-            userId,
-            phone,
-            unit
-          };
+          lastUserData = userData;
+
           form.reset();
           updateBirthdateRequirement();
         } catch (error) {
@@ -475,14 +518,11 @@
         doc.text("Keep this information safe. You will need it for any activity registration!", 105, 120, { align: "center" });
         doc.save(`Kenz-User-Data-${lastUserData.userId}.pdf`);
       });
+
+      goToEditPage.addEventListener('click', () => {
+        window.location.href = 'kenz-edit.html';
+      });
     });
-    // زر الانتقال إلى صفحة التعديل
-  const goToEditPage = document.getElementById('goToEditPage');
-  if (goToEditPage) {
-    goToEditPage.addEventListener('click', () => {
-      window.location.href = 'kenz-edit.html';
-    });
-  }
   </script>
 </body>
 </html>
