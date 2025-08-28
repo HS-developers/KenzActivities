@@ -183,12 +183,13 @@
       table-layout: fixed;
     }
     th, td {
-      padding: 12px 7px;
-      text-align: center;
-      border-bottom: 1px solid #ffd54f;
-      font-family: 'Cairo', sans-serif;
-      word-break: break-word; /* ⬅️ هذا هو التعديل المطلوب */
-    }
+  padding: 8px 4px; /* ⬅️ تقليل الهوامش */
+  text-align: center;
+  border-bottom: 1px solid #ffd54f;
+  font-family: 'Cairo', sans-serif;
+  word-break: break-word; /* ⬅️ لف النصوص الطويلة */
+  white-space: normal;    /* ⬅️ السماح بالتقسيم */
+}
     th {
       background: linear-gradient(90deg, #ff9800 70%, #ffe082 100%);
       color: #fff;
@@ -247,10 +248,11 @@
       .admin-filters, .admin-total { font-size: 0.98em;}
       .export-btn, .football-btn, .logout-btn { font-size: 0.95em; padding: 8px 18px;}
       th:nth-child(1), td:nth-child(1),
-      th:nth-child(5), td:nth-child(5) {
-      display: none;
-     }
-    }
+      th:nth-child(5), td:nth-child(5),
+      th:nth-child(6), td:nth-child(6) {
+    display: none;
+  }
+}
     @media (max-width: 400px) {
       th, td, .admin-filters, .admin-total, .export-btn, .football-btn, .logout-btn { font-size: 0.81em;}
       .panel-container { padding: 4px 1vw;}
